@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">LIST OF CATEGORIES</h1>
+                <h1 class="m-0">CATEGORIES</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -18,6 +18,23 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
+
+@if ($errors->any())
+    <div class="alert alert-danger  mt-2">
+        <strong>Por las chancas de mi madre!</strong> Algo fue mal..<br><br>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+@if (Session::get('success'))
+    <div class="alert alert-success  mt-2">
+        <strong>{{Session::get('success')}}<br>
+    </div>
+@endif
 
 <!-- Hoverable rows start -->
 <section class="section">
@@ -32,14 +49,17 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="input-group mb-6">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                                        <input type="text" class="form-control" name="searchText" placeholder="Buscar categorías" value="{{ $searchText }}" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Buscar</button>
+                                        <input type="text" class="form-control" name="searchText" placeholder="Search categories" value="{{ $searchText }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="input-group mb-6">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
-                                        <a href="{{ route('categories.create') }}" class="btn btn-success">Nueva</a>
+                                        <!-- <a href="{{ route('categories.create') }}" class="btn btn-success">+</a> -->
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New Category">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -63,17 +83,23 @@
                             </thead>
                             <tbody>
                                 @foreach ($categories as $category)
-                                <tr>
-                                    <td>
-                                        <a href="#" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a>
-                                        <!-- Button trigger for danger theme modal -->
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-delete"><i class="fas fa-trash-alt"></i></button>
-                                    </td>
-                                    <td>{{ $category->id}}</td>
-                                    <td>{{ $category->category}}</td>
-                                    <td>{{ $category->description}}</td>
+                                    <tr>
+                                        <td>
+                                            <!-- Button trigger for edit theme modal -->
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEdit{{ $category->id }}" title="Update Category">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <!-- Button trigger for danger theme modal -->
+                                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $category->id }}" title="Delete Category">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                        <td>{{ $category->id}}</td>
+                                        <td>{{ $category->category}}</td>
+                                        <td>{{ $category->description}}</td>
 
-                                </tr>
+                                    </tr>
+                                    @include('depot.categories.modals')
                                 @endforeach
                             </tbody>
                         </table>
@@ -86,4 +112,102 @@
 </section>
 <!-- Hoverable rows end -->
 
+<!-- Modal Create -->
+<div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="modalCreateLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{route('categories.store')}}" method="POST" class="form">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="category" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" name="category" id="category" aria-describedby="category-error" aria-invalid="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-form-label">Description:</label>
+                        <textarea class="form-control" name="description" id="description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // Validate Create Modal
+            $('#modalCreate .form').validate({
+                rules: {
+                    category: {
+                        required: true
+                    }
+                },
+                messages: {
+                    category: {
+                        required: "Please enter a category name"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+            // Validate Edit Modals
+            $('[id^="modalEdit"]').each(function() {
+                var modalId = $(this).attr('id');
+                $('#' + modalId + ' form').validate({
+                    rules: {
+                        category_edit: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        category_edit: {
+                            required: "Please enter a category name"
+                        }
+                    },
+                    errorElement: 'span',
+                    errorPlacement: function(error, element) {
+                        error.addClass('invalid-feedback');
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function(element, errorClass, validClass) {
+                        $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function(element, errorClass, validClass) {
+                        $(element).removeClass('is-invalid');
+                    }
+                });
+            });
+
+            // Prevent sent form if is not valid
+            $('.form').on('submit', function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
 @endsection
