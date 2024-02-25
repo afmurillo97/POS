@@ -46,13 +46,17 @@ class CategoryController extends Controller
      */
     public function store(CategoryFormRequest $request): RedirectResponse
     {
+        $request->validate([
+            'category' => 'required'
+        ]);
+
         $category = new Category();
         $category->category = $request->get('category');
         $category->description = $request->get('description');
         $category->status = 1;
         $category->save();
 
-        return Redirect::to('depot/categories');
+        return Redirect::to('depot/categories')->with('success', 'New Category added successfully!!!');
     }
 
     /**
@@ -76,12 +80,16 @@ class CategoryController extends Controller
      */
     public function update(CategoryFormRequest $request, $id): RedirectResponse
     {
+        $request->validate([
+            'category' => 'required'
+        ]);
+
         $category = Category::findOrFail($id);
         $category->category = $request->get('category');
         $category->description = $request->get('description');
         $category->update();
 
-        return Redirect::to('depot/categories');
+        return Redirect::to('depot/categories')->with('success', 'Category updated successfully!!!');
     }
 
     /**
@@ -90,9 +98,9 @@ class CategoryController extends Controller
     public function destroy($id): RedirectResponse
     {
         $category = Category::findOrFail($id);
-        $category->status = 0;
+        $category->status = '0';
         $category->update();
 
-        return Redirect::to('depot/categories');
+        return Redirect::to('depot/categories')->with('success', 'Category disabled successfully!!!');
     }
 }
