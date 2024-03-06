@@ -14,7 +14,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="category" class="col-form-label">Name:</label>
-                        <input type="text" value="{{ $category->category }}" class="form-control" name="category" id="category"  aria-describedby="category-error" aria-invalid="true">
+                        <input type="text" value="{{ $category->category }}" class="form-control" name="category" id="category" aria-describedby="category-error" aria-invalid="true">
                     </div>
                     <div class="form-group">
                         <label for="description" class="col-form-label">Description:</label>

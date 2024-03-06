@@ -21,7 +21,7 @@
 
 @if ($errors->any())
     <div class="alert alert-danger  mt-2">
-        <strong>Por las chancas de mi madre!</strong> Algo fue mal..<br><br>
+        <strong>It seems that something has gone wrong!</strong><br><br>
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -43,7 +43,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="col-xl-12">
-                        <form action="{{ route('categories.index') }}" method="get">
+                        <form action="{{ route('categories.index') }}" method="GET">
 
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -86,7 +86,7 @@
                                     <tr>
                                         <td>
                                             <!-- Button trigger for edit theme modal -->
-                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEdit{{ $category->id }}" title="Update Category">
+                                            <button type="button" class="btn btn-warning btn-sm editCategory" data-toggle="modal" data-target="#modalEdit{{ $category->id }}" title="Update Category">
                                                 <i class="fas fa-pen"></i>
                                             </button>
                                             <!-- Button trigger for danger theme modal -->
@@ -148,7 +148,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            // Validate Create Modal
+            // Inicializar el validador para el modal de creación
             $('#modalCreate .form').validate({
                 rules: {
                     category: {
@@ -173,35 +173,7 @@
                 }
             });
 
-            // Validate Edit Modals
-            $('[id^="modalEdit"]').each(function() {
-                var modalId = $(this).attr('id');
-                $('#' + modalId + ' form').validate({
-                    rules: {
-                        category_edit: {
-                            required: true
-                        }
-                    },
-                    messages: {
-                        category_edit: {
-                            required: "Please enter a category name"
-                        }
-                    },
-                    errorElement: 'span',
-                    errorPlacement: function(error, element) {
-                        error.addClass('invalid-feedback');
-                        element.closest('.form-group').append(error);
-                    },
-                    highlight: function(element, errorClass, validClass) {
-                        $(element).addClass('is-invalid');
-                    },
-                    unhighlight: function(element, errorClass, validClass) {
-                        $(element).removeClass('is-invalid');
-                    }
-                });
-            });
-
-            // Prevent sent form if is not valid
+            // Prevenir el envío del formulario si no es válido
             $('.form').on('submit', function(e) {
                 if (!$(this).valid()) {
                     e.preventDefault();
