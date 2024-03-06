@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,8 @@ Route::get('/', function () {
 });
 
 Route::resource('depot/categories', CategoryController::class);
+
+Route::resource('depot/products', ProductController::class);
+Route::put('depot/products/{product}/toggle', [ProductController::class, 'toggle'])->name('products.toggle');
+Route::post('/products/export', [ProductController::class, 'export'])->name('products.export');
+
