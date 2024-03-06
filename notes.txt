@@ -1,0 +1,7 @@
+-- Create Controller(CRUD) and model
+
+php artisan make:controller ProductController --resource --model=Product
+
+-- Create Validation file
+
+php artisan make:request ProductFormRequest
