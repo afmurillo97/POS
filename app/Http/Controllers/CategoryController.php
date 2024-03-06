@@ -27,7 +27,7 @@ class CategoryController extends Controller
             $categories = DB::table('categories')->where('category', 'LIKE', '%'.$query.'%')
                 ->where('status', '=', 1)
                 ->orderBy('id', 'desc')
-                ->paginate(7);
+                ->paginate(3);
             
             return view('depot.categories.index', ['categories' => $categories, 'searchText' => $query]);
         }
