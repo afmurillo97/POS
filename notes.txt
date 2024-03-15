@@ -5,3 +5,11 @@ php artisan make:controller ProductController --resource --model=Product
 -- Create Validation file
 
 php artisan make:request ProductFormRequest
+
+-- Clear Laravel cache
+
+php artisan cache:clear
+
+-- Clear Routes cache
+
+php artisan route:cache
