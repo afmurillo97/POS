@@ -23,7 +23,6 @@
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
   <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -106,7 +105,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Almacen
+                Depot
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -114,13 +113,13 @@
               <li class="nav-item">
                 <a href="{{ route('products.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Productos</p>
+                  <p>Products</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('categories.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Categorías</p>
+                  <p>Categories</p>
                 </a>
               </li>
             </ul>
@@ -281,6 +280,8 @@
 <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<!-- Incluye SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 @yield('scripts')
 </body>
