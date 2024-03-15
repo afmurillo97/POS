@@ -6,7 +6,6 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\CategoryFormRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -22,15 +21,21 @@ class CategoryController extends Controller
      */
     public function index(Request $request): View
     {
-        if ($request) {
-            $query = trim($request->get('searchText'));
-            $categories = DB::table('categories')->where('category', 'LIKE', '%'.$query.'%')
-                ->where('status', '=', 1)
-                ->orderBy('id', 'desc')
-                ->paginate(3);
-            
-            return view('depot.categories.index', ['categories' => $categories, 'searchText' => $query]);
+        $query = strtolower($request->input('searchText'));
+
+        $categoriesQuery = Category::orderBy('id', 'desc');
+
+        // Aplica la búsqueda si se proporciona un término de búsqueda
+        if ($query) {
+            $categoriesQuery->where(function($queryBuilder) use ($query) {
+                $queryBuilder->where('category', 'LIKE', '%'.$query.'%')
+                            ->orWhere('description', 'LIKE', '%'.$query.'%');
+            });
         }
+
+        $categories = $categoriesQuery->paginate(5);
+
+        return view('depot.categories.index', ['categories' => $categories, 'searchText' => $query]);
     }
 
     /**
@@ -46,12 +51,9 @@ class CategoryController extends Controller
      */
     public function store(CategoryFormRequest $request): RedirectResponse
     {
-        $request->validate([
-            'category' => 'required'
-        ]);
 
         $category = new Category();
-        $category->category = $request->get('category');
+        $category->name = $request->get('name');
         $category->description = $request->get('description');
         $category->status = 1;
         $category->save();
@@ -62,45 +64,53 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id): View
+    public function show(Category $category): View
     {
-        return view('depot.categories.show', ['categories' => Category::findOrFail($id)]);        
+        return view('depot.categories.show', ['category' => $category]);        
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): View
+    public function edit(Category $category): View
     {
-        return view('depot.categories.edit', ['categories' => Category::findOrFail($id)]);        
+        return view('depot.categories.edit', ['category' => $category]);        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryFormRequest $request, $id): RedirectResponse
+    public function update(CategoryFormRequest $request, Category $category): RedirectResponse
     {
-        $request->validate([
-            'category' => 'required'
-        ]);
 
-        $category = Category::findOrFail($id);
-        $category->category = $request->get('category');
+        $category->name = $request->get('name');
         $category->description = $request->get('description');
         $category->update();
 
-        return Redirect::to('depot/categories')->with('success', 'Category updated successfully!!!');
+        return Redirect::to('depot/categories/'. $category->id .'/edit')->with('success', 'Category updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id): RedirectResponse
+    public function destroy(Category $category): RedirectResponse
     {
-        $category = Category::findOrFail($id);
-        $category->status = '0';
-        $category->update();
+        $category->delete();
 
-        return Redirect::to('depot/categories')->with('success', 'Category disabled successfully!!!');
+        return Redirect::to('depot/categories')->with('success', 'Category deleted successfully!!!');
+    }
+
+    /**
+     * Enable/Disable the specified resource from storage.
+     */
+    public function toggle(Request $request, Category $category): RedirectResponse
+    {
+        $category->status = ($category->status == '1') ? '0' : '1';
+        $message = ($category->status == '1') ? 'enabled' : 'disabled';
+        $category->save();
+
+        $page = $request->input('page');
+
+        return Redirect::to('depot/categories?page='. $page)->with('success', 'Category '. $category->name .' '.$message.' successfully!!!');
     }
 }

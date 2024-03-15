@@ -8,13 +8,13 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('categories.update', $category->id) }}" method="POST" class="form">
+            <form action="{{ route('categories.update', $category) }}" method="POST" class="form">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="category" class="col-form-label">Name:</label>
-                        <input type="text" value="{{ $category->category }}" class="form-control" name="category" id="category" aria-describedby="category-error" aria-invalid="true">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input type="text" value="{{ $category->name }}" class="form-control" name="name" id="name" aria-describedby="name-error" aria-invalid="true">
                     </div>
                     <div class="form-group">
                         <label for="description" class="col-form-label">Description:</label>
@@ -38,10 +38,10 @@
                 <h5 class="modal-title fs-5" id="modalDelete{{ $category->id }}Label">Delete Category</h1>
             </div>
             <div class="modal-body">
-                Are you sure to delete the category {{ $category->category }}?
+                Are you sure to delete the category {{ $category->name }}?
             </div>
             <div class="modal-footer">
-                <form action="{{ route('categories.destroy', $category->id ) }}" method="POST" class="d-inline">
+                <form action="{{ route('categories.destroy', $category ) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete</button>
