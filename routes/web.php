@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 
@@ -19,9 +20,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('depot/categories', CategoryController::class);
+// Export any file
+Route::post('/export/csv', [ExportController::class, 'csv'])->name('export.csv');
+Route::post('/export/excel', [ExportController::class, 'excel'])->name('export.excel');
+Route::post('/export/pdf', [ExportController::class, 'pdf'])->name('export.pdf');
 
+// Categories
+Route::resource('depot/categories', CategoryController::class);
+Route::put('depot/categories/{category}/toggle', [CategoryController::class, 'toggle'])->name('categories.toggle');
+
+// Products
 Route::resource('depot/products', ProductController::class);
 Route::put('depot/products/{product}/toggle', [ProductController::class, 'toggle'])->name('products.toggle');
-Route::post('/products/export', [ProductController::class, 'export'])->name('products.export');
+
 
