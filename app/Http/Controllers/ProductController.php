@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 
@@ -32,14 +29,14 @@ class ProductController extends Controller
         $query = strtolower($request->input('searchText'));
 
         $productsQuery = Product::join('categories', 'products.category_id', '=', 'categories.id')
-            ->select('products.*', 'categories.category AS category')
+            ->select('products.*', 'categories.name AS category')
             
             ->orderBy('products.id', 'desc');
 
         if ($query) {
             $productsQuery->where(function($queryBuilder) use ($query) {
                 $queryBuilder->where('products.name', 'LIKE', '%'.$query.'%')
-                            ->orWhere('categories.category', 'LIKE', '%'.$query.'%')
+                            ->orWhere('categories.name', 'LIKE', '%'.$query.'%')
                             ->orWhere('products.code', 'LIKE', '%'.$query.'%')
                             ->orWhere('products.description', 'LIKE', '%'.$query.'%');
             });
@@ -47,9 +44,7 @@ class ProductController extends Controller
 
         $products = $productsQuery->paginate(10);
 
-        $categories = Category::where('status', 1)->orderBy('category', 'asc')->get();
-
-        // dd($products);
+        $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
         
         return view('depot.products.index', [
             'products' => $products, 
@@ -57,7 +52,6 @@ class ProductController extends Controller
             'searchText' => $query
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -160,68 +154,4 @@ class ProductController extends Controller
         return Redirect::to('depot/products?page='. $page)->with('success', 'Product '. $product->name .' '.$message.' successfully!!!');
     }
 
-    public function export(Request $request)
-    {
-        $exportType = $request->input('export_type', 'csv');
-
-        $products = Product::join('categories', 'products.category_id', '=', 'categories.id')
-        ->select('products.id', 'products.name', 'categories.category AS category', 'products.code', 'products.stock', 'products.description', 'products.image')
-        ->get();
-
-        if ($exportType === 'csv') {
-
-            $csv = \League\Csv\Writer::createFromString('');
-            $csv->insertOne(['Id', 'Name', 'Category', 'Code', 'Stock', 'Description', 'Url_image']); // Cabecera
-
-            foreach ($products as $product) {
-                $csv->insertOne([
-                    $product->id, 
-                    $product->name, 
-                    $product->category, 
-                    $product->code, 
-                    $product->stock, 
-                    $product->description, 
-                    $product->image
-                ]);
-            }
-
-            $filename = 'products.csv';
-
-            return response($csv->toString(), 200, [
-                'Content-Type' => 'text/csv',
-                'Content-Disposition' => 'attachment; filename="'.$filename.'"',
-            ]);
-
-        } elseif ($exportType === 'excel') {
-
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-    
-            // Agregar encabezados
-            $sheet->fromArray(['Id', 'Name', 'Category', 'Code', 'Stock', 'Description', 'Url_image'], NULL, 'A1');
-    
-            // Agregar datos de productos
-            $products = $products->toArray();
-            $sheet->fromArray($products, NULL, 'A2');
-    
-            $filename = 'products.xlsx';
-    
-            // Crear el objeto Writer y guardar el archivo Excel
-            $writer = new Xlsx($spreadsheet);
-    
-            // Enviar la respuesta al navegador
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="'. $filename .'"');
-            header('Cache-Control: max-age=0');
-    
-            $writer->save('php://output');
-            exit();
-
-        } elseif ($exportType === 'pdf') {
-            // Generate PDF
-        } else {
-            // Action not valid
-        }
-        
-    }
 }

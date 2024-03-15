@@ -55,17 +55,34 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-6 d-flex justify-content-end">
-                            <form action="{{ route('products.export') }}" method="POST">
-                                @csrf
-                                <div class="btn-group btn-sm align-middle">
-                                    <button id="copy" class="btn btn-secondary" type="button"><span>Copy</span></button>
-                                    <button class="btn btn-secondary" type="submit" name="export_type" value="csv">CSV</button>
-                                    <button class="btn btn-secondary" type="submit" name="export_type" value="excel">Excel</button>
-                                    <button class="btn btn-secondary" type="submit" name="export_type" value="pdf">PDF</button>
-                                    <button id="" class="btn btn-secondary" type="button"><span>Print</span></button>
-                                </div>
-                            </form>
+                        <div class="col-md-2">
+                            <div class="input-group mb-6">
+                                <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New Product">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            @if($searchText === '')
+                            <div class="btn-group btn-sm align-middle">
+                                <form action="#">
+                                    <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
+                                </form>
+                                <form action="{{ route( 'export.csv', ['table_name' => 'products'] ) }}" method="POST">
+                                    @csrf
+                                    <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
+                                </form>
+                                <form action="{{ route( 'export.excel', ['table_name' => 'products'] ) }}" method="POST">
+                                    @csrf
+                                    <button class="btn btn-secondary" type="submit" title="Export to Excel">Excel</button>
+                                </form>
+                                <form action="{{ route( 'export.pdf', ['table_name' => 'products'] ) }}" method="POST">
+                                    @csrf
+                                    <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
+                                </form>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -194,6 +211,50 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            $('#modalCreate .form').validate({
+                rules: {
+                    code: {
+                        required: true
+                    },
+                    name: {
+                        required: true
+                    },
+                    stock: {
+                        required: true
+                    }
+                },
+                messages: {
+                    code: {
+                        required: "Please enter a code"
+                    },
+                    name: {
+                        required: "Please enter a name"
+                    },
+                    stock: {
+                        required: "Please enter a valid quantity"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+            // Prevenir el envío del formulario si no es válido
+            $('.form').on('submit', function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
             // Initialize DataTable
             $(function () {
                 $('#table_products').DataTable({
@@ -232,47 +293,26 @@
                 selectedData += "\n";
             });
 
-            // Copiar al portapapeles
+            // Copy to clipboard
             navigator.clipboard.writeText(selectedData).then(function() {
-                alert("¡Los datos seleccionados se copiaron al portapapeles!");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Copied to Clipboard!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                var copyButton = document.getElementById("copy");
+                copyButton.innerHTML = '<i class="fas fa-check-double"></i>';
+                copyButton.disabled = true;
             }, function() {
-                alert("¡Error al copiar los datos!");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error copying data!'
+                });
             });
         }
 
-        // $(document).ready(function() {
-        //     // Inicializar el validador para el modal de creación
-        //     $('#modalCreate .form').validate({
-        //         rules: {
-        //             product: {
-        //                 required: true
-        //             }
-        //         },
-        //         messages: {
-        //             product: {
-        //                 required: "Please enter a product name"
-        //             }
-        //         },
-        //         errorElement: 'span',
-        //         errorPlacement: function(error, element) {
-        //             error.addClass('invalid-feedback');
-        //             element.closest('.form-group').append(error);
-        //         },
-        //         highlight: function(element, errorClass, validClass) {
-        //             $(element).addClass('is-invalid');
-        //         },
-        //         unhighlight: function(element, errorClass, validClass) {
-        //             $(element).removeClass('is-invalid');
-        //         }
-        //     });
-
-        //     // Prevenir el envío del formulario si no es válido
-        //     $('.form').on('submit', function(e) {
-        //         if (!$(this).valid()) {
-        //             e.preventDefault();
-        //             return false;
-        //         }
-        //     });
-        // });
     </script>
 @endsection

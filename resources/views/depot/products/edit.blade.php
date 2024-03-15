@@ -59,7 +59,7 @@
                                     <label>Category</label>
                                     <select class="form-control" name="category_id" id="category_id">
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" title="{{ $category->description }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->category }}</option>
+                                            <option value="{{ $category->id }}" title="{{ $category->description }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -110,6 +110,53 @@
 
 @section('scripts')
     <script>
-        
+
+        $(document).ready(function() {
+            // Inicializar el validador para el modal de creación
+            $('.form').validate({
+                rules: {
+                    code: {
+                        required: true
+                    },
+                    name: {
+                        required: true
+                    },
+                    stock: {
+                        required: true
+                    }
+                },
+                messages: {
+                    code: {
+                        required: "Please enter a code"
+                    },
+                    name: {
+                        required: "Please enter a name"
+                    },
+                    stock: {
+                        required: "Please enter a valid quantity"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+            // Prevenir el envío del formulario si no es válido
+            $('.form').on('submit', function(e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+
     </script>
 @endsection
