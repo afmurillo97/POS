@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('provider_id');
@@ -24,6 +26,8 @@ return new class extends Migration
             // Define restriction
             $table->foreign('provider_id')->references('id')->on('providers');
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
