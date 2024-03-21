@@ -128,7 +128,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Compras
+                Shopping
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -136,13 +136,13 @@
               <li class="nav-item">
                 <a href="pages/charts/chartjs.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Ingresos</p>
+                  <p>Incomes</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="pages/charts/flot.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Proveedores</p>
+                  <p>Suppliers</p>
                 </a>
               </li>
             </ul>
@@ -151,21 +151,21 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
               <p>
-                Ventas
+                Sales
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/UI/general.html" class="nav-link">
+                <a href="{{ route('clients.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>General</p>
+                  <p>Clients</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/UI/icons.html" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Icons</p>
+                  <p>Sales</p>
                 </a>
               </li>
             </ul>
@@ -174,7 +174,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
-                Seguridad
+                Security
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -182,7 +182,7 @@
               <li class="nav-item">
                 <a href="pages/forms/general.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Usuarios</p>
+                  <p>Users</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -197,7 +197,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
-                Reporteria
+                Reports
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -205,7 +205,7 @@
               <li class="nav-item">
                 <a href="pages/tables/simple.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Ventas x Día</p>
+                  <p>Sales x Day</p>
                 </a>
               </li>
             </ul>
