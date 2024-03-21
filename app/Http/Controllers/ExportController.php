@@ -69,7 +69,7 @@ class ExportController extends Controller
     /**
      * Generate PDF Document.
      */
-    public function pdf(Request $request)
+    public function pdf(Request $request): StreamedResponse
     {
         $this->initializeExportData($request);
 
@@ -102,7 +102,8 @@ class ExportController extends Controller
         foreach ($this->elements as $key => $element) {
             $html .= '<tr ' . ($key % 2 == 0 ? 'style="background-color: #f2f2f2;"' : '') . '>';
             foreach ($element->toArray() as $data) {
-                $html .= '<td>' . $data . '</td>';
+                $texto = $this->insertSpaces($data);
+                $html .= '<td>' . $texto . '</td>';
             }
             $html .= '</tr>';
         }
@@ -182,4 +183,25 @@ class ExportController extends Controller
         ]);
     }
     
+    /**
+     * Prepare data for PDF case.
+     */
+    private function insertSpaces($data): String {
+        // Divide la cadena en palabras
+        $words = explode(' ', $data);
+        
+        // Recorre cada palabra
+        foreach ($words as &$word) {
+            // Verifica si la primera palabra es más larga que 10 caracteres
+            if (strlen($word) > 10) {
+                // Divide la palabra en subcadenas de 10 caracteres y las une con un espacio
+                $word = implode(' ', str_split($word, 10));
+            }
+        }
+        
+        // Une las palabras nuevamente en una cadena
+        $result = implode(' ', $words);
+        
+        return $result;
+    }
 }
