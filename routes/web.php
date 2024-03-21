@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 
 /*
@@ -32,5 +33,9 @@ Route::put('depot/categories/{category}/toggle', [CategoryController::class, 'to
 // Products
 Route::resource('depot/products', ProductController::class);
 Route::put('depot/products/{product}/toggle', [ProductController::class, 'toggle'])->name('products.toggle');
+
+// Clients
+Route::resource('sales/clients', ClientController::class);
+Route::put('sales/clients/{client}/toggle', [ClientController::class, 'toggle'])->name('clients.toggle');
 
 
