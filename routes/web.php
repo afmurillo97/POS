@@ -5,6 +5,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProviderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,4 +39,6 @@ Route::put('depot/products/{product}/toggle', [ProductController::class, 'toggle
 Route::resource('sales/clients', ClientController::class);
 Route::put('sales/clients/{client}/toggle', [ClientController::class, 'toggle'])->name('clients.toggle');
 
-
+// Clients
+Route::resource('shopping/providers', ProviderController::class);
+Route::put('shopping/providers/{provider}/toggle', [ProviderController::class, 'toggle'])->name('providers.toggle');
