@@ -8,7 +8,6 @@ use App\Http\Requests\ClientFormRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Str;
 
 class ClientController extends Controller
 {
@@ -26,7 +25,6 @@ class ClientController extends Controller
 
         $clientsQuery = Client::orderBy('id', 'desc');
 
-        // Aplica la búsqueda si se proporciona un término de búsqueda
         if ($query) {
             $clientsQuery->where(function($queryBuilder) use ($query) {
                 $queryBuilder->where('name', 'LIKE', '%'.$query.'%')
