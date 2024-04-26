@@ -49,11 +49,8 @@ class IncomeController extends Controller
 
         $incomes = $incomesQuery->paginate(5);
 
-        $providers = Provider::where('status', 1)->orderBy('name', 'asc')->get();
-
         return view('shopping.incomes.index', [
             'incomes' => $incomes,
-            'providers' => $providers, 
             'searchText' => $query
         ]);
     }
