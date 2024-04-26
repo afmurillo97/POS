@@ -13,3 +13,9 @@ php artisan cache:clear
 -- Clear Routes cache
 
 php artisan route:cache
+
+-- Create Migration
+
+php artisan make:migration create_products_table
+
+php artisan migrate
