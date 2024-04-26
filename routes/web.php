@@ -7,6 +7,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\SaleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,3 +48,7 @@ Route::put('shopping/providers/{provider}/toggle', [ProviderController::class, '
 // Incomes
 Route::resource('shopping/incomes', IncomeController::class);
 Route::put('shopping/incomes/{income}/toggle', [IncomeController::class, 'toggle'])->name('incomes.toggle');
+
+// Sales
+Route::resource('sales/sales', SaleController::class);
+Route::put('sales/sales/{sale}/toggle', [SaleController::class, 'toggle'])->name('sales.toggle');
