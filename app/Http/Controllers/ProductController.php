@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductFormRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 
@@ -91,9 +92,35 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product): View
+    public function show(Request $request)
     {
-        return view('depot.products.show', ['product' => $product]);
+        $product_id = $request->get('product_id');
+    
+        $product = Product::join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*', 'categories.name AS category')
+            ->where('products.id', '=', $product_id)
+
+            ->first();
+        
+        if (!$product) {
+            return response()->json([
+                'status' => false,
+                'title' => 'Error Searching',
+                'message' => 'Product not found.'
+            ], 404);
+        }
+
+        $last_sale_price = DB::table('income_detail')
+        ->where('product_id', $product_id)
+        ->latest('created_at')
+        ->value('sale_price');
+
+        $product->sale_price = $last_sale_price;
+
+        return response()->json([
+            'status' => true,
+            'product' => $product
+        ], 200);
     }
 
     /**
