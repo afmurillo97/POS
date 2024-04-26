@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('voucher_type');
             $table->string('voucher_number');
             $table->dateTime('date');
-            $table->decimal('tax', 8, 2); // with 8 digits and 2 decimals
+            $table->decimal('tax', 4, 2); // with 4 digits and 2 decimals
+            $table->decimal('total', 11, 2);
+            $table->enum('status', [1, 0])->nullable();
             $table->timestamps();
 
             // Define restriction
@@ -34,6 +36,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('sales');
+        Schema::enableForeignKeyConstraints();
     }
 };
