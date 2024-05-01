@@ -8,6 +8,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -54,6 +55,10 @@ Route::put('shopping/incomes/{income}/toggle', [IncomeController::class, 'toggle
 Route::resource('sales/sales', SaleController::class);
 Route::put('sales/sales/{sale}/toggle', [SaleController::class, 'toggle'])->name('sales.toggle');
 
+// Authentication
 Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Users
+Route::resource('security/users', UserController::class);
+Route::put('security/users/{user}/toggle', [UserController::class, 'toggle'])->name('users.toggle');
