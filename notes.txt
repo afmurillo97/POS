@@ -19,3 +19,7 @@ php artisan route:cache
 php artisan make:migration create_products_table
 
 php artisan migrate
+
+-- Instal and Run other dependences
+
+npm install && npm run dev
