@@ -160,10 +160,9 @@
                     <div class="form-group">
                         <label for="role" class="col-form-label">Role:</label>
                         <select class="form-control" name="role" id="role" aria-describedby="role-error" aria-invalid="true">
-                            <option value="Admin">Admin</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Sales">Sales</option>
-                            <option value="Guest">Guest</option>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">

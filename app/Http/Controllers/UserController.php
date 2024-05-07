@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -36,8 +37,14 @@ class UserController extends Controller
         }
 
         $users = $usersQuery->paginate(5);
+        $roles = Role::all();
 
-        return view('security.users.index', ['users' => $users, 'searchText' => $query]);
+        return view('security.users.index', [
+            'users' => $users, 
+            'roles' => $roles, 
+            'searchText' => $query
+        ]);
+
     }
 
     /**
@@ -84,17 +91,20 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserFormRequest $request, User $user): RedirectResponse
+    public function update(Request $request, User $user)
     {
 
-        $user->role = $request->get('role');
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->password = Hash::make($request->get('password'));
-        $user->status = "1";
-        $user->update();
+        // $user->role = $request->get('role');
+        // $user->name = $request->get('name');
+        // $user->email = $request->get('email');
+        // $user->password = Hash::make($request->get('password'));
+        // $user->status = "1";
+        // $user->update();
 
-        return Redirect::to('security/users/'. $user->id .'/edit')->with('success', 'User updated successfully!');
+        // return Redirect::to('security/users/'. $user->id .'/edit')->with('success', 'User updated successfully!');
+
+        $user->roles()->sync($request->roles);
+        return Redirect::to('security/users')->with('success', 'User updated successfully!');
     }
 
     /**

@@ -13,13 +13,18 @@
                 @method('PUT')
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="role" class="col-form-label">Role:</label>
-                        <select class="form-control" name="role" id="role" aria-describedby="role-error" aria-invalid="true">
-                            <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
-                            <option value="Manager" {{ $user->role == 'Manager' ? 'selected' : '' }}>Manager</option>
-                            <option value="Sales" {{ $user->role == 'Sales' ? 'selected' : '' }}>Sales</option>
-                            <option value="Guest" {{ $user->role == 'Guest' ? 'selected' : '' }}>Guest</option>
-                        </select>
+                    <h5>Roles List:</h5>
+                        {!! Form::model($user, [ 'route' => ['users.update', $user], 'method' => 'put']) !!}
+                            @foreach($roles as $role)
+                                <div>
+                                    <label>
+                                        {!! Form::checkbox('roles[]', $role->id, $user->hasAnyRole($role->id) ? : false, ['class' => 'mr-1']) !!}
+                                        {{ $role->name }}
+                                    </label>
+                                </div>
+                            @endforeach
+                            {!! Form::submit('Asign Roles', [ 'class' => 'btn btn-primary' ]) !!}
+                        {!! Form::close() !!}
                     </div>
                     <div class="form-group">
                         <label for="name" class="col-form-label">Name:</label>
