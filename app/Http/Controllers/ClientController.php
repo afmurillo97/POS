@@ -7,13 +7,21 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ClientFormRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class ClientController extends Controller
 {
     public function __construct()
     {
-        
+        $this->middleware(function ($request, $next) {
+            // Verificar si el usuario tiene el permiso adecuado usando Laravel Spatie
+            if (!Gate::allows('Edit Client')) {
+                abort(403); // O cualquier otra acción que desees tomar
+            }
+    
+            return $next($request);
+        })->only('edit');
     }
 
     /**
