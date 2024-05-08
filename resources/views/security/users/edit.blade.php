@@ -51,12 +51,13 @@
                     <div class="row">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="role" class="col-form-label">Role:</label>
-                                <select class="form-control" name="role" id="role" aria-describedby="role-error" aria-invalid="true">
-                                    <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="Manager" {{ $user->role == 'Manager' ? 'selected' : '' }}>Manager</option>
-                                    <option value="Sales" {{ $user->role == 'Sales' ? 'selected' : '' }}>Sales</option>
-                                    <option value="Guest" {{ $user->role == 'Guest' ? 'selected' : '' }}>Guest</option>
+                                <label for="role" class="col-form-label">User Role:</label>
+                                <select name="role_id" id="role_id" class="form-control">
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id }}" {{ $user->hasAnyRole($role->id) ? 'selected' : '' }}>
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
@@ -74,7 +75,9 @@
                         </div>
                     </div>   
                     <div class="card-footer">
+                        @can('Edit Users')
                         <button type="submit" class="btn btn-primary">Update</button>
+                        @endcan
                     </div>
                 </form>
             </div>
@@ -93,7 +96,7 @@
             // Inicializar el validador para el modal de creación
             $('.form').validate({
                 rules: {
-                    role: {
+                    role_id: {
                         required: true
                     },
                     name: {
@@ -109,7 +112,7 @@
                     }
                 },
                 messages: {
-                    role: {
+                    role_id: {
                         required: "Please select a role"
                     },
                     name: {

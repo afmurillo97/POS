@@ -13,18 +13,14 @@
                 @method('PUT')
                 <div class="modal-body">
                     <div class="form-group">
-                    <h5>Roles List:</h5>
-                        {!! Form::model($user, [ 'route' => ['users.update', $user], 'method' => 'put']) !!}
+                        <label for="role_id" class="col-form-label">Role:</label>
+                        <select name="role_id" id="role_id" class="form-control">
                             @foreach($roles as $role)
-                                <div>
-                                    <label>
-                                        {!! Form::checkbox('roles[]', $role->id, $user->hasAnyRole($role->id) ? : false, ['class' => 'mr-1']) !!}
-                                        {{ $role->name }}
-                                    </label>
-                                </div>
+                                <option value="{{ $role->id }}" {{ $user->hasAnyRole($role->id) ? 'selected' : '' }}>
+                                    {{ $role->name }}
+                                </option>
                             @endforeach
-                            {!! Form::submit('Asign Roles', [ 'class' => 'btn btn-primary' ]) !!}
-                        {!! Form::close() !!}
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="name" class="col-form-label">Name:</label>
@@ -40,8 +36,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @can('Edit Users')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update</button>
+                    @endcan
                 </div>
             </form>
         </div>
@@ -59,11 +57,13 @@
                 Are you sure to delete the user {{ $user->name }}?
             </div>
             <div class="modal-footer">
+                @can('Delete Users')
                 <form action="{{ route('users.destroy', $user ) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
+                @endcan
             </div>
         </div>
     </div>

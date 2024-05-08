@@ -47,8 +47,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @can('Edit Clients')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update</button>
+                    @endcan
                 </div>
             </form>
         </div>
@@ -66,11 +68,13 @@
                 Are you sure to delete the Client {{ $client->name }}?
             </div>
             <div class="modal-footer">
+                @can('Delete Clients')
                 <form action="{{ route('clients.destroy', $client ) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
+                @endcan
             </div>
         </div>
     </div>

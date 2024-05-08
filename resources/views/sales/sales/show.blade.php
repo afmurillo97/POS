@@ -88,7 +88,7 @@
                                                 <td>{{ $detail->amount }}</td>
                                                 <td>{{ $detail->discount }}</td>
                                                 <td>{{ $detail->sale_price }}</td>
-                                                <td>{{ $detail->amount * $detail->sale_price - $detail->discount }}</td>
+                                                <td>{{ number_format($detail->amount * $detail->sale_price - $detail->discount, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -58,32 +58,13 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-6">
+                                    @can('Edit Roles')
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New Role">
                                         <i class="fas fa-plus"></i>
                                     </button>
+                                    @endcan
                                 </div>
-                            </div>
-                            <div class="col-md-4 d-flex justify-content-end">
-                                @if($searchText === '')
-                                <div class="btn-group btn-sm align-middle">
-                                    <form action="#">
-                                        <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
-                                    </form>
-                                    <form action="{{ route( 'export.csv', ['table_name' => 'roles'] ) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
-                                    </form>
-                                    <form action="{{ route( 'export.excel', ['table_name' => 'roles'] ) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-secondary" type="submit" title="Export to Excel">Excel</button>
-                                    </form>
-                                    <form action="{{ route( 'export.pdf', ['table_name' => 'roles'] ) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
-                                    </form>
-                                </div>
-                                @endif
                             </div>
                         </div>    
                     </div>
@@ -105,14 +86,18 @@
                                 @foreach ($roles as $role)
                                     <tr>
                                         <td class="btn-group btn-sm align-items-center">
+                                            @can('Edit Roles')
                                             <!-- Button trigger for edit theme modal -->
-                                            <button type="button" class="btn btn-warning btn-sm editCategory" data-toggle="modal" data-target="#modalEdit{{ $role->id }}" title="Update Role">
+                                            <button type="button" class="btn btn-outline-warning btn-sm editCategory" data-toggle="modal" data-target="#modalEdit{{ $role->id }}" title="Update Role">
                                                 <i class="fas fa-pen"></i>
                                             </button>
+                                            @endcan
+                                            @can('Delete Roles')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $role->id }}" title="Delete Role">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
+                                            @endcan
                                         </td>
                                         <td>{{ $role->id }}</td>
                                         <td>{{ $role->name }}</td>
@@ -149,13 +134,42 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @can('Create Roles')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
+                    @endcan
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .custom-table {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .custom-row {
+        display: table-row;
+    }
+
+    .custom-cell {
+        display: table-cell;
+        padding: 8px;
+        border: 1px solid #ccc;
+    }
+    .form-check {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .form-check-input {
+        margin-right: 5px;
+    }
+</style>
 
 @endsection
 
@@ -252,5 +266,17 @@
                 });
             });
         }
+
+        function selAll(selectAllCheckbox) {
+
+            const formGroup = selectAllCheckbox.closest('.form-group');
+            const permissionCheckboxes = formGroup.querySelectorAll('.permission-checkbox');
+
+            permissionCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+
+        }
+
     </script>
 @endsection

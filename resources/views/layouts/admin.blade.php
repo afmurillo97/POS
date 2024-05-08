@@ -39,10 +39,12 @@
       if (auth()->check()) {
           if (auth()->user()->hasRole('Administrator')) {
               $userRole = 'Administrator';
-          } elseif (auth()->user()->hasRole('User')) {
-              $userRole = 'User';
+          } elseif (auth()->user()->hasRole('Manager')) {
+              $userRole = 'Manager';
+          } elseif (auth()->user()->hasRole('Sales')) {
+              $userRole = 'Sales';
           } else {
-              $userRole = 'No Rol';
+              $userRole = 'Guest';
           }
       }
   @endphp
@@ -115,7 +117,7 @@
             </a>
             
           </li>
-          
+          @canAny(['Show Products', 'Show Categories'])
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -125,20 +127,26 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @can('Show Products')
               <li class="nav-item">
                 <a href="{{ route('products.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Products</p>
                 </a>
               </li>
+              @endcan
+              @can('Show Categories')
               <li class="nav-item">
                 <a href="{{ route('categories.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Categories</p>
                 </a>
               </li>
+              @endcan
             </ul>
           </li>
+          @endcanAny
+          @canAny(['Show Incomes', 'Show Providers'])
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
@@ -148,20 +156,26 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @can('Show Incomes')
               <li class="nav-item">
                 <a href="{{ route('incomes.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Incomes</p>
                 </a>
               </li>
+              @endcan
+              @can('Show Providers')
               <li class="nav-item">
                 <a href="{{ route('providers.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Providers</p>
                 </a>
               </li>
+              @endcan
             </ul>
           </li>
+          @endcanAny
+          @canAny(['Show Clients', 'Show Sales'])
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
@@ -171,20 +185,26 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @can('Show Clients')
               <li class="nav-item">
                 <a href="{{ route('clients.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Clients</p>
                 </a>
               </li>
+              @endcan
+              @can('Show Sales')
               <li class="nav-item">
                 <a href="{{ route('sales.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sales</p>
                 </a>
               </li>
+              @endcan
             </ul>
           </li>
+          @endcanAny
+          @canAny(['Show Users', 'Show Roles', 'Show Permissions'])
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
@@ -194,43 +214,33 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @can('Show Users')
               <li class="nav-item">
                 <a href="{{ route('users.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Users</p>
                 </a>
               </li>
+              @endcan
+              @can('Show Roles')
               <li class="nav-item">
                 <a href="{{ route('roles.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Roles</p>
                 </a>
               </li>
+              @endcan
+              @can('Show Permissions')
               <li class="nav-item">
                 <a href="{{ route('permissions.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Permissions</p>
                 </a>
               </li>
+              @endcan
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Reports
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Sales x Day</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          @endcanAny
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

@@ -61,7 +61,9 @@
                         </div>
                     </div>   
                     <div class="card-footer">
+                        @can('Edit Categories')
                         <button type="submit" class="btn btn-primary">Update</button>
+                        @endcan
                     </div>
                 </form>
             </div>

@@ -58,10 +58,12 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-6">
+                                    @can('Create Sales')
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                     <a class="bth btn-primary btn-sm" href="{{ route('sales.create') }}">
                                         <i class="fas fa-plus"></i>
                                     </a>
+                                    @endcan
                                 </div>
                             </div>
                             <div class="col-md-4 d-flex justify-content-end">
@@ -70,6 +72,7 @@
                                     <form action="#">
                                         <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
                                     </form>
+                                    @can('Export Sales')
                                     <form action="{{ route( 'export.csv', ['table_name' => 'sales'] ) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
@@ -82,6 +85,7 @@
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
                                     </form>
+                                    @endcan
                                 </div>
                                 @endif
                             </div>
@@ -110,15 +114,19 @@
                                 @foreach ($sales as $sale)
                                     <tr>
                                         <td class="btn-group btn-sm align-items-center">
+                                            @can('Show Sales')
                                             <!-- Button trigger for edit theme modal -->
-                                            <a href="{{ route('sales.show', $sale) }}" class="btn btn-secondary btn-sm" title="Show Sale">
+                                            <a href="{{ route('sales.show', $sale) }}" class="btn btn-outline-secondary btn-sm" title="Show Sale">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            @endcan
+                                            @can('Delete Sales')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $sale->id }}" title="Delete Sale">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
-
+                                            @endcan
+                                            @can('Edit Sales')
                                             <form id="switchForm{{ $sale->id }}" action="{{ route('sales.toggle', $sale) }}" method="POST" class="form">
                                                 @csrf
                                                 @method('PUT')
@@ -128,6 +136,7 @@
                                                     <label class="custom-control-label" for="customSwitch{{ $sale->id }}"></label>
                                                 </div>
                                             </form>
+                                            @endcan
                                         </td>
                                         <td>{{ $sale->id }}</td>
                                         <td>{{ \Carbon\Carbon::parse($sale->date)->format('Y-m-d') }}</td>

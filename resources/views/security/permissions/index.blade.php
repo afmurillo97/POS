@@ -58,32 +58,13 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-6">
+                                    @can('Edit Permissions')
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New Permission">
                                         <i class="fas fa-plus"></i>
                                     </button>
+                                    @endcan
                                 </div>
-                            </div>
-                            <div class="col-md-4 d-flex justify-content-end">
-                                @if($searchText === '')
-                                <div class="btn-group btn-sm align-middle">
-                                    <form action="#">
-                                        <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
-                                    </form>
-                                    <form action="{{ route( 'export.csv', ['table_name' => 'permissions'] ) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
-                                    </form>
-                                    <form action="{{ route( 'export.excel', ['table_name' => 'permissions'] ) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-secondary" type="submit" title="Export to Excel">Excel</button>
-                                    </form>
-                                    <form action="{{ route( 'export.pdf', ['table_name' => 'permissions'] ) }}" method="POST">
-                                        @csrf
-                                        <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
-                                    </form>
-                                </div>
-                                @endif
                             </div>
                         </div>    
                     </div>
@@ -105,19 +86,23 @@
                                 @foreach ($permissions as $permission)
                                     <tr>
                                         <td class="btn-group btn-sm align-items-center">
+                                            @can('Edit Permissions')
                                             <!-- Button trigger for edit theme modal -->
-                                            <button type="button" class="btn btn-warning btn-sm editCategory" data-toggle="modal" data-target="#modalEdit{{ $permission->id }}" title="Update Permission">
+                                            <button type="button" class="btn btn-outline-warning btn-sm editCategory" data-toggle="modal" data-target="#modalEdit{{ $permission->id }}" title="Update Permission">
                                                 <i class="fas fa-pen"></i>
                                             </button>
+                                            @endcan
+                                            @can('Delete Permissions')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $permission->id }}" title="Delete Permission">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
+                                            @endcan
                                         </td>
                                         <td>{{ $permission->id }}</td>
                                         <td>{{ $permission->name }}</td>
                                     </tr>
-                                    
+                                    @include('security.permissions.modals')
                                 @endforeach
                             </tbody>
                         </table>
@@ -149,8 +134,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @can('Create Permissions')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
+                    @endcan
                 </div>
             </form>
         </div>
@@ -223,7 +210,7 @@
             var selectedData = "";
             var table = $('#table_permissions').DataTable();
             var selectedRows = table.rows({ selected: true }).data();
-            var columnsToCopy = [1];
+            var columnsToCopy = [1, 2];
 
             selectedRows.each(function(rowData) {
                 columnsToCopy.forEach(function(colIndex) {

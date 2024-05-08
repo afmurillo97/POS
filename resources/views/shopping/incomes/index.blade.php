@@ -58,10 +58,12 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-6">
+                                    @can('Create Incomes')
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                     <a class="bth btn-primary btn-sm" href="{{ route('incomes.create') }}">
                                         <i class="fas fa-plus"></i>
                                     </a>
+                                    @endcan
                                 </div>
                             </div>
                             <div class="col-md-4 d-flex justify-content-end">
@@ -70,6 +72,7 @@
                                     <form action="#">
                                         <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
                                     </form>
+                                    @can('Export Incomes')
                                     <form action="{{ route( 'export.csv', ['table_name' => 'incomes'] ) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
@@ -82,6 +85,7 @@
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
                                     </form>
+                                    @endcan
                                 </div>
                                 @endif
                             </div>
@@ -110,15 +114,19 @@
                                 @foreach ($incomes as $income)
                                     <tr>
                                         <td class="btn-group btn-sm align-items-center">
+                                            @can('Show Incomes')
                                             <!-- Button trigger for edit theme modal -->
-                                            <a href="{{ route('incomes.show', $income) }}" class="btn btn-secondary btn-sm" title="Show Income">
+                                            <a href="{{ route('incomes.show', $income) }}" class="btn btn-outline-secondary btn-sm" title="Show Income">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            @endcan
+                                            @can('Delete Incomes')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $income->id }}" title="Delete Income">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
-
+                                            @endcan
+                                            @can('Edit Incomes')
                                             <form id="switchForm{{ $income->id }}" action="{{ route('incomes.toggle', $income) }}" method="POST" class="form">
                                                 @csrf
                                                 @method('PUT')
@@ -128,6 +136,7 @@
                                                     <label class="custom-control-label" for="customSwitch{{ $income->id }}"></label>
                                                 </div>
                                             </form>
+                                            @endcan
                                         </td>
                                         <td>{{ $income->id }}</td>
                                         <td>{{ \Carbon\Carbon::parse($income->date)->format('Y-m-d') }}</td>

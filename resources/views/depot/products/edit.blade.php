@@ -96,7 +96,9 @@
                         </div>
                     </div>   
                     <div class="card-footer">
+                        @can('Edit Products')
                         <button type="submit" class="btn btn-primary">Update</button>
+                        @endcan
                     </div>
                 </form>
             </div>

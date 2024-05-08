@@ -58,10 +58,12 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-6">
+                                    @can('Create Providers')
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New Provider">
                                         <i class="fas fa-plus"></i>
                                     </button>
+                                    @endcan
                                 </div>
                             </div>
                             <div class="col-md-4 d-flex justify-content-end">
@@ -70,6 +72,7 @@
                                     <form action="#">
                                         <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
                                     </form>
+                                    @can('Export Providers')
                                     <form action="{{ route( 'export.csv', ['table_name' => 'providers'] ) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
@@ -82,6 +85,7 @@
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
                                     </form>
+                                    @endcan
                                 </div>
                                 @endif
                             </div>
@@ -110,15 +114,19 @@
                                 @foreach ($providers as $provider)
                                     <tr>
                                         <td class="btn-group btn-sm align-items-center">
+                                            @can('Edit Providers')
                                             <!-- Button trigger for edit theme modal -->
-                                            <button type="button" class="btn btn-warning btn-sm editClient" data-toggle="modal" data-target="#modalEdit{{ $provider->id }}" title="Update Provider">
+                                            <button type="button" class="btn btn-outline-warning btn-sm editClient" data-toggle="modal" data-target="#modalEdit{{ $provider->id }}" title="Update Provider">
                                                 <i class="fas fa-pen"></i>
                                             </button>
+                                            @endcan
+                                            @can('Delete Providers')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $provider->id }}" title="Delete Provider">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
-
+                                            @endcan
+                                            @can('Edit Providers')
                                             <form id="switchForm{{ $provider->id }}" action="{{ route('providers.toggle', $provider) }}" method="POST" class="form">
                                                 @csrf
                                                 @method('PUT')
@@ -128,6 +136,7 @@
                                                     <label class="custom-control-label" for="customSwitch{{ $provider->id }}"></label>
                                                 </div>
                                             </form>
+                                            @endcan
                                         </td>
                                         <td>{{ $provider->id }}</td>
                                         <td>{{ $provider->name }}</td>
@@ -194,8 +203,10 @@
                     </div>
                 </div>    
                 <div class="modal-footer">
+                    @can('Create Providers')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
+                    @endcan
                 </div>
             </form>
         </div>

@@ -155,8 +155,10 @@
                     </div>
                 
                     <div class="card-footer">
+                        @can('Create Sales')
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <button type="button" id="save" name="save" class="btn btn-primary">Save</button>
+                        @endcan
                     </div>
                 </form>
             </div>

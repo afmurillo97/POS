@@ -57,10 +57,12 @@
                         </div>
                         <div class="col-md-2">
                             <div class="input-group mb-6">
+                                @can('Create Products')
                                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New Product">
                                     <i class="fas fa-plus"></i>
                                 </button>
+                                @endcan
                             </div>
                         </div>
                         <div class="col-md-4 d-flex justify-content-end">
@@ -69,6 +71,7 @@
                                 <form action="#">
                                     <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
                                 </form>
+                                @can('Export Products')
                                 <form action="{{ route( 'export.csv', ['table_name' => 'products'] ) }}" method="POST">
                                     @csrf
                                     <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
@@ -81,6 +84,7 @@
                                     @csrf
                                     <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
                                 </form>
+                                @endcan
                             </div>
                             @endif
                         </div>
@@ -106,16 +110,19 @@
                                 @foreach ($products as $product)
                                     <tr class="">
                                         <td class="btn-group btn-sm align-items-center">
+                                            @can('Edit Products')
                                             <!-- Button trigger for edit theme modal -->
-                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEdit{{ $product->id }}" title="Update Product">
+                                            <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#modalEdit{{ $product->id }}" title="Update Product">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-
+                                            @endcan
+                                            @can('Delete Products')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $product->id }}" title="Delete Product">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
-
+                                            @endcan
+                                            @can('Edit Products')
                                             <form id="switchForm{{ $product->id }}" action="{{ route('products.toggle', $product) }}" method="POST" class="form">
                                                 @csrf
                                                 @method('PUT')
@@ -125,6 +132,7 @@
                                                     <label class="custom-control-label" for="customSwitch{{ $product->id }}"></label>
                                                 </div>
                                             </form>
+                                            @endcan
                                         </td>
                                         <td>
                                             @if($product->image)
@@ -174,7 +182,7 @@
                         <label>Category</label>
                         <select class="form-control" name="category_id" id="category_id">
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" title="{{ $category->description }}">{{ $category->category }}</option>
+                                <option value="{{ $category->id }}" title="{{ $category->description }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -198,8 +206,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @can('Create Products')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
+                    @endcan
                 </div>
             </form>
         </div>

@@ -43,8 +43,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @can('Edit Providers')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update</button>
+                    @endcan
                 </div>
             </form>
         </div>
@@ -62,11 +64,13 @@
                 Are you sure to delete the Provider {{ $provider->name }}?
             </div>
             <div class="modal-footer">
+                @can('Delete Providers')
                 <form action="{{ route('providers.destroy', $provider ) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
+                @endcan
             </div>
         </div>
     </div>

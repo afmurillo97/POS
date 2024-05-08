@@ -87,7 +87,9 @@
                                         @endphp
                                         @foreach($income_detail as $detail)
                                             @php
-                                                $subtotal = number_format($detail->amount * $detail->purchase_price, 2);
+                                                $purchase_price = floatval($detail->purchase_price);
+                                                $amount = intval($detail->amount);
+                                                $subtotal = $amount * $purchase_price;
                                                 $total += $subtotal;
                                             @endphp
                                             <tr>
@@ -95,7 +97,7 @@
                                                 <td>{{ $detail->amount }}</td>
                                                 <td>{{ $detail->purchase_price }}</td>
                                                 <td>{{ $detail->sale_price }}</td>
-                                                <td>{{ $subtotal }}</td>
+                                                <td>{{ number_format($subtotal, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

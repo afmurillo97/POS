@@ -58,7 +58,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-6">
-                                    @can('Create Client')
+                                    @can('Create Clients')
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New Client">
                                         <i class="fas fa-plus"></i>
@@ -72,6 +72,7 @@
                                     <form action="#">
                                         <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
                                     </form>
+                                    @can('Export Clients')
                                     <form action="{{ route( 'export.csv', ['table_name' => 'clients'] ) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
@@ -84,6 +85,7 @@
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
                                     </form>
+                                    @endcan
                                 </div>
                                 @endif
                             </div>
@@ -113,19 +115,19 @@
                                 @foreach ($clients as $client)
                                     <tr>
                                         <td class="btn-group btn-sm align-items-center">
-                                            @can('Edit Client')
+                                            @can('Edit Clients')
                                             <!-- Button trigger for edit theme modal -->
-                                            <button type="button" class="btn btn-warning btn-sm editClient" data-toggle="modal" data-target="#modalEdit{{ $client->id }}" title="Update Client">
+                                            <button type="button" class="btn btn-outline-warning btn-sm editClient" data-toggle="modal" data-target="#modalEdit{{ $client->id }}" title="Update Client">
                                                 <i class="fas fa-pen"></i>
                                             </button>
                                             @endcan
-                                            @can('Delete Client')
+                                            @can('Delete Clients')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $client->id }}" title="Delete Client">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                             @endcan
-                                           
+                                            @can('Edit Clients')
                                             <form id="switchForm{{ $client->id }}" action="{{ route('clients.toggle', $client) }}" method="POST" class="form">
                                                 @csrf
                                                 @method('PUT')
@@ -135,6 +137,7 @@
                                                     <label class="custom-control-label" for="customSwitch{{ $client->id }}"></label>
                                                 </div>
                                             </form>
+                                            @endcan
                                             
                                         </td>
                                         <td>{{ $client->id }}</td>
@@ -207,8 +210,10 @@
                     </div>
                 </div>    
                 <div class="modal-footer">
+                    @can('Create Clients')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
+                    @endcan
                 </div>
             </form>
         </div>

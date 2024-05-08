@@ -58,10 +58,12 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-6">
+                                    @can('Create Users')
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate" title="New User">
                                         <i class="fas fa-plus"></i>
                                     </button>
+                                    @endcan
                                 </div>
                             </div>
                             <div class="col-md-4 d-flex justify-content-end">
@@ -70,6 +72,7 @@
                                     <form action="#">
                                         <button id="copy" class="btn btn-secondary" type="button" title="Copy page to clipboard">Copy</button>
                                     </form>
+                                    @can('Export Users')
                                     <form action="{{ route( 'export.csv', ['table_name' => 'users'] ) }}" method="POST">
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to CSV">CSV</button>
@@ -82,6 +85,7 @@
                                         @csrf
                                         <button class="btn btn-secondary" type="submit" title="Export to PDF">PDF</button>
                                     </form>
+                                    @endcan
                                 </div>
                                 @endif
                             </div>
@@ -107,15 +111,19 @@
                                 @foreach ($users as $user)
                                     <tr>
                                         <td class="btn-group btn-sm align-items-center">
+                                            @can('Edit Users')
                                             <!-- Button trigger for edit theme modal -->
-                                            <button type="button" class="btn btn-warning btn-sm editCategory" data-toggle="modal" data-target="#modalEdit{{ $user->id }}" title="Update User">
+                                            <button type="button" class="btn btn-outline-warning btn-sm editCategory" data-toggle="modal" data-target="#modalEdit{{ $user->id }}" title="Update User">
                                                 <i class="fas fa-pen"></i>
                                             </button>
+                                            @endcan
+                                            @can('Delete Users')
                                             <!-- Button trigger for danger theme modal -->
                                             <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#modalDelete{{ $user->id }}" title="Delete User">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
-
+                                            @endcan
+                                            @can('Edit Users')
                                             <form id="switchForm{{ $user->id }}" action="{{ route('users.toggle', $user) }}" method="POST" class="form">
                                                 @csrf
                                                 @method('PUT')
@@ -125,6 +133,7 @@
                                                     <label class="custom-control-label" for="customSwitch{{ $user->id }}"></label>
                                                 </div>
                                             </form>
+                                            @endcan
                                         </td>
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->name }}</td>
@@ -159,7 +168,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="role" class="col-form-label">Role:</label>
-                        <select class="form-control" name="role" id="role" aria-describedby="role-error" aria-invalid="true">
+                        <select class="form-control" name="role_id" id="role_id" aria-describedby="role_id-error" aria-invalid="true">
                             @foreach($roles as $role)
                                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                             @endforeach
@@ -179,8 +188,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @can('Create Users')
                     <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
+                    @endcan
                 </div>
             </form>
         </div>
@@ -195,7 +206,7 @@
             // Inicializar el validador para el modal de creación
             $('#modalCreate .form').validate({
                 rules: {
-                    role: {
+                    role_id: {
                         required: true
                     },
                     name: {
@@ -211,7 +222,7 @@
                     }
                 },
                 messages: {
-                    role: {
+                    role_id: {
                         required: "Please select a role"
                     },
                     name: {
