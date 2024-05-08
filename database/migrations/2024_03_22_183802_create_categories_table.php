@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -18,6 +20,8 @@ return new class extends Migration
             $table->enum('status', [1, 0])->nullable();
             $table->timestamps();
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -25,6 +29,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('categories');
+
+        Schema::enableForeignKeyConstraints();
     }
 };
