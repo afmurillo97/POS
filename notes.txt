@@ -18,8 +18,12 @@ php artisan route:cache
 
 php artisan make:migration create_products_table
 
+-- Drop and Refresh Migrations
+
+php artisan migrate:refresh
+
 php artisan migrate
 
--- Instal and Run other dependences
+-- Instal and Run other npm dependences
 
 npm install && npm run dev
