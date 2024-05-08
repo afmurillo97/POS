@@ -29,11 +29,9 @@ Route::get('/', function () {
 });
 
 // Authentication
-Auth::routes();
+Auth::routes(['register' => false]);
 
-Route::middleware([
-    'auth',
-])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Home
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
