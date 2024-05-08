@@ -37,8 +37,8 @@ class UserFormRequest extends FormRequest
 
         return [
 
-            'role' => 'required',
             'name' => 'required|max:100',
+            'role_id' => 'required',
             'email' => 'required|email',
             'password' => $passwordRule . '|min:6'
 
