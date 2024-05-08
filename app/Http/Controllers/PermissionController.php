@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PermissionFormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
@@ -17,8 +18,17 @@ class PermissionController extends Controller
     {
         $query = strtolower($request->input('searchText'));
 
-        $permissions = Permission::orderBy('id', 'desc')->paginate(5);
+        $permissionsQuery = Permission::orderBy('id', 'desc');
 
+        if ($query) {
+            $permissionsQuery->where(function($queryBuilder) use ($query) {
+                $queryBuilder->where('id', 'LIKE', '%'.$query.'%')
+                            ->orWhere('name', 'LIKE', '%'.$query.'%');
+            });
+        }
+
+        $permissions = $permissionsQuery->paginate(5);
+        
         return view('security.permissions.index', ['permissions' => $permissions, 'searchText' => $query]);
     }
 
@@ -33,7 +43,7 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(PermissionFormRequest $request): RedirectResponse
     {
         
         $permission = Permission::create(['name' => $request->get('name')]);
@@ -61,16 +71,20 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PermissionFormRequest $request, Permission $permission): RedirectResponse
     {
-        //
+        $permission->update(['name' => $request->get('name')]);
+
+        return Redirect::to('security/permissions')->with('success', 'Permission updated successfully!!!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Permission $permission): RedirectResponse
     {
-        //
+        $permission->delete();
+
+        return Redirect::to('security/permissions')->with('success', 'Permission deleted successfully!!!');
     }
 }

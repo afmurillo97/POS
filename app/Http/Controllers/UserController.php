@@ -25,14 +25,17 @@ class UserController extends Controller
     {
         $query = strtolower($request->input('searchText'));
 
-        $usersQuery = User::orderBy('id', 'desc');
+        $usersQuery = User::join('roles', 'users.role_id', '=', 'roles.id')
+            ->select('users.*', 'roles.name AS role')
+
+            ->orderBy('id', 'desc');
 
         // Aplica la búsqueda si se proporciona un término de búsqueda
         if ($query) {
             $usersQuery->where(function($queryBuilder) use ($query) {
-                $queryBuilder->where('role', 'LIKE', '%'.$query.'%')
-                            ->orWhere('name', 'LIKE', '%'.$query.'%')
-                            ->orWhere('email', 'LIKE', '%'.$query.'%');
+                $queryBuilder->where('users.name', 'LIKE', '%'.$query.'%')
+                            ->orWhere('roles.name', 'LIKE', '%'.$query.'%')
+                            ->orWhere('users.email', 'LIKE', '%'.$query.'%');
             });
         }
 
@@ -62,14 +65,17 @@ class UserController extends Controller
     {
 
         $user = new User();
-        $user->role = $request->get('role');
+        $user->role_id = $request->get('role_id');
         $user->name = $request->get('name');
         $user->email = $request->get('email');
         $user->password = Hash::make($request->get('password'));
         $user->status = "1";
         $user->save();
 
+        $user->roles()->sync( [$request->get('role_id')] );
+
         return Redirect::to('security/users')->with('success', 'New User added successfully!!!');
+        
     }
 
     /**
@@ -85,7 +91,9 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        return view('security.users.edit', ['user' => $user]);        
+        $roles = Role::all();
+
+        return view('security.users.edit', ['user' => $user, 'roles' => $roles]);        
     }
 
     /**
@@ -94,17 +102,17 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
 
-        // $user->role = $request->get('role');
-        // $user->name = $request->get('name');
-        // $user->email = $request->get('email');
-        // $user->password = Hash::make($request->get('password'));
-        // $user->status = "1";
-        // $user->update();
+        $user->role_id = $request->get('role_id');
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->get('password'));
+        $user->status = "1";
+        $user->update();
 
-        // return Redirect::to('security/users/'. $user->id .'/edit')->with('success', 'User updated successfully!');
+        $user->roles()->sync( [$request->get('role_id')] );
 
-        $user->roles()->sync($request->roles);
-        return Redirect::to('security/users')->with('success', 'User updated successfully!');
+        return Redirect::to('security/users/'. $user->id .'/edit')->with('success', 'User updated successfully!');
+
     }
 
     /**

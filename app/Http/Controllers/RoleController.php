@@ -25,7 +25,16 @@ class RoleController extends Controller
     {
         $query = strtolower($request->input('searchText'));
 
-        $roles = Role::orderBy('id', 'desc')->paginate(5);
+        $rolesQuery = Role::orderBy('id', 'desc');
+
+        if ($query) {
+            $rolesQuery->where(function($queryBuilder) use ($query) {
+                $queryBuilder->where('id', 'LIKE', '%'.$query.'%')
+                            ->orWhere('name', 'LIKE', '%'.$query.'%');
+            });
+        }
+
+        $roles = $rolesQuery->paginate(5);
         $permissions = Permission::all();
 
         return view('security.roles.index', [
@@ -78,7 +87,9 @@ class RoleController extends Controller
     public function update(Request $request, Role $role): RedirectResponse
     {
 
+        $role->update(['name' => $request->get('name')]);
         $role->permissions()->sync($request->permissions);
+        
         return Redirect::to('security/roles')->with('success', 'Role updated successfully!');
 
     }
