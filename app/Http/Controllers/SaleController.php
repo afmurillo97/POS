@@ -14,12 +14,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class SaleController extends Controller
 {
     public function __construct()
     {
-        
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Sales')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only(['index', 'show']);
+
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Create Sales')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('create');
     }
 
     /**
@@ -173,10 +190,9 @@ class SaleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sale $sale): View
+    public function edit(Sale $sale): bool
     {
-        $clients = Client::where('status', 1)->orderBy('name', 'asc')->get();
-        return view('sales.sales.edit', ['sale' => $sale, 'clients' => $clients]);
+        return false;
     }
 
     /**

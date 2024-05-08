@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
@@ -15,7 +16,23 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Users')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('index');
+
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Edit Users')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('edit');
     }
 
     /**
@@ -81,9 +98,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): View
+    public function show(User $user): bool
     {
-        return view('security.users.show', ['user' => $user]);        
+        return false;       
     }
 
     /**

@@ -15,9 +15,18 @@ class ClientController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            // Verificar si el usuario tiene el permiso adecuado usando Laravel Spatie
-            if (!Gate::allows('Edit Client')) {
-                abort(403); // O cualquier otra acción que desees tomar
+            
+            if (!Gate::allows('Show Clients')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('index');
+
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Edit Clients')) {
+                abort(403);
             }
     
             return $next($request);
@@ -82,9 +91,9 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Client $client): View
+    public function show(Client $client): bool
     {
-        return view('sales.clients.show', ['client' => $client]);
+        return false;
     }
 
     /**

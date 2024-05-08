@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
@@ -15,7 +16,14 @@ class RoleController extends Controller
 {
     public function __construct()
     {
-       
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Roles')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('index');
     }
 
     /**
@@ -68,17 +76,17 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Role $role): View
+    public function show(Role $role): bool
     {
-        return view('security.roles.show', ['role' => $role]);        
+        return false;        
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role): View
+    public function edit(Role $role): bool
     {
-        return view('security.roles.edit', ['role' => $role]);        
+        return false;        
     }
 
     /**

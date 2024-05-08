@@ -7,13 +7,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\CategoryFormRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
     public function __construct()
     {
-        
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Categories')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('index');
+
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Edit Categories')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('edit');
     }
 
     /**
@@ -64,9 +81,9 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category): View
+    public function show(Category $category): bool
     {
-        return view('depot.categories.show', ['category' => $category]);        
+        return false;      
     }
 
     /**

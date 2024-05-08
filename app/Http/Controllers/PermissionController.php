@@ -6,11 +6,26 @@ use App\Http\Requests\PermissionFormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Permissions')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('index');
+
+    }
+
     /**
      * Display a listing of the resource.
      */

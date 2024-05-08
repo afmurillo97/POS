@@ -14,12 +14,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class IncomeController extends Controller
 {
     public function __construct()
     {
-        
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Incomes')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only(['index', 'show']);
+
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Create Incomes')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('create');
     }
 
     /**
@@ -165,10 +182,9 @@ class IncomeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Income $income): View
+    public function edit(Income $income): bool
     {
-        $providers = Provider::where('status', 1)->orderBy('name', 'asc')->get();
-        return view('shopping.incomes.edit', ['income' => $income, 'providers' => $providers]);
+        return false;
     }
 
     /**

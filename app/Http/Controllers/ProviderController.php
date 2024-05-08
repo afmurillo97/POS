@@ -7,13 +7,30 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProviderFormRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class ProviderController extends Controller
 {
     public function __construct()
     {
-        
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Providers')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('index');
+
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Edit Providers')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('edit');
     }
 
     /**
@@ -72,9 +89,9 @@ class ProviderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Provider $provider): View
+    public function show(Provider $provider): bool
     {
-        return view('shopping.providers.show', ['provider' => $provider]);
+        return false;
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Http\Requests\ProductFormRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 
@@ -19,7 +20,23 @@ class ProductController extends Controller
 {
     public function __construct()
     {
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Show Products')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only('index');
 
+        $this->middleware(function ($request, $next) {
+            
+            if (!Gate::allows('Edit Products')) {
+                abort(403);
+            }
+    
+            return $next($request);
+        })->only(['edit', 'show']);
     }
 
     /**
@@ -43,7 +60,7 @@ class ProductController extends Controller
             });
         }
 
-        $products = $productsQuery->paginate(10);
+        $products = $productsQuery->paginate(5);
 
         $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
         
