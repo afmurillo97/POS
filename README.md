@@ -26,10 +26,10 @@
 <br />
 <div align="center">
   <a href="https://www.electronitech.com.co" target="_blank">
-    <img src="public/storage/screenshots/logo-point-of-sale-white.png" alt="Logo" width="200" height="200">
+    <img src="public/screenshots/logo-point-of-sale-white.png" alt="Logo" width="200" height="200">
   </a>
 
-  <h3 align="center">Electronitech Proyect</h3>
+  <h3 align="center">Poin Of Sale (POS) Proyect</h3>
 
   <p align="center">
     Our Point of Sale (POS) system is a comprehensive solution designed to streamline sales operations for businesses of all sizes. Developed using Laravel framework and leveraging PHP, MySQL, and JavaScript technologies, this POS system offers robust features including CRUD functionalities, session management, role-based access control, and error handling. Additionally, it facilitates the generation of PDF, Excel, and CSV files for efficient reporting and analysis. With a user-friendly interface and seamless integration with various payment gateways, our POS system optimizes the sales process and enhances overall business efficiency.
@@ -63,13 +63,13 @@ To access the system locally, you'll need to create user accounts with the follo
 ## Screenshots
 
 <div align="center">
-  <img src="public/storage/screenshots/Screenshot_1.png" alt="Start Project" width="600">
+  <img src="public/screenshots/Screenshot_1.png" alt="Start Project" width="600">
   <p>Start Project</p>
   
-  <img src="public/storage/screenshots/Screenshot_3.png" alt="Articles Section" width="600">
+  <img src="public/screenshots/Screenshot_3.png" alt="Articles Section" width="600">
   <p>Products Section</p>
   
-  <img src="public/storage/screenshots/Screenshot_2.png" alt="Graphics Section" width="600">
+  <img src="public/screenshots/Screenshot_2.png" alt="Graphics Section" width="600">
   <p>Graphics Section</p>
 </div>
 
