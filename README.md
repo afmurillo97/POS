@@ -49,7 +49,7 @@ To enter the sales system you can do it with the following users.
 
 ### Setting Up User Accounts
 
-To access the system locally, you'll need to create user accounts with the following credentials:
+To access the system locally, you will need to create user accounts with the following credentials depending on the roles you want to view:
 
 * **Manager Account:**
   - **Email:** manager@pointofsale.com
