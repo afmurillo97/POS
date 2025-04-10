@@ -25,7 +25,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://www.electronitech.com.co" target="_blank">
+  <a href="https://www.pos-demo.online" target="_blank">
     <img src="public/screenshots/logo-point-of-sale-white.png" alt="Logo" width="200" height="200">
   </a>
 
