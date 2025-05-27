@@ -29,7 +29,7 @@
     <img src="public/screenshots/logo-point-of-sale-white.png" alt="Logo" width="200" height="200">
   </a>
 
-  <h3 align="center">Poin Of Sale (POS) Proyect</h3>
+  <h3 align="center">Point Of Sale (POS) Project</h3>
 
   <p align="center">
     Our Point of Sale (POS) system is a comprehensive solution designed to streamline sales operations for businesses of all sizes. Developed using Laravel framework and leveraging PHP, MySQL, and JavaScript technologies, this POS system offers robust features including CRUD functionalities, session management, role-based access control, and error handling. Additionally, it facilitates the generation of PDF, Excel, and CSV files for efficient reporting and analysis. With a user-friendly interface and seamless integration with various payment gateways, our POS system optimizes the sales process and enhances overall business efficiency.
@@ -45,19 +45,92 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To enter the sales system you can do it with the following users.
+### Prerequisites
 
-### Setting Up User Accounts
+* PHP >= 8.2
+* Composer
+* Node.js >= 16
+* MySQL >= 8.0
+* NPM or Yarn
 
-To access the system locally, you will need to create user accounts with the following credentials depending on the roles you want to view:
+> **Note:** The application uses Laravel's storage system for file uploads. Make sure to create the storage link using `php artisan storage:link` after installation. This creates a symbolic link from `public/storage` to `storage/app/public`, allowing public access to uploaded files.
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone git@github.com:afmurillo97/POS.git
+cd POS
+```
+
+2. Install PHP dependencies:
+```bash
+composer install
+```
+
+3. Copy environment file:
+```bash
+cp .env.example .env
+```
+
+4. Generate application key:
+```bash
+php artisan key:generate
+```
+
+5. Configure database in `.env` file:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=pos_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+6. Run migrations and seeders:
+```bash
+php artisan migrate:fresh --seed
+```
+
+7. Install Node.js dependencies:
+```bash
+npm install
+```
+
+8. Compile assets:
+```bash
+npm run dev
+```
+
+9. Create storage link for public access:
+```bash
+php artisan storage:link
+```
+
+10. Start development server:
+```bash
+php artisan serve
+```
+
+### User Accounts
+
+The system includes three predefined user roles with different access levels:
+
+* **Admin Account:**
+  - **Email:** admin@example.com
+  - **Password:** admin123
+  - **Permissions:** Full access to all system functionalities
 
 * **Manager Account:**
-  - **Email:** manager@pointofsale.com
-  - **Password:** 123456
+  - **Email:** manager@example.com
+  - **Password:** manager123
+  - **Permissions:** Access to all functionalities except export of users, roles, and permissions
 
-* **Guest Account:**
-  - **Email:** guest@pointofsale.com
-  - **Password:** 123456
+* **Cashier Account:**
+  - **Email:** cashier@example.com
+  - **Password:** cashier123
+  - **Permissions:** Limited access to products, clients, and sales
 
 <!-- SCREENSHOTS -->
 ## Screenshots
