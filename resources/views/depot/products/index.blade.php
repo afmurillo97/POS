@@ -137,13 +137,13 @@
                                         <td>
                                             @if($product->image)
                                                 <a href="#" data-toggle="modal" data-target="#imageProductModal{{ $product->id }}">
-                                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" height="70px" width="70px" class="img-thumbnail">
+                                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" height="70px" width="70px" class="img-thumbnail">
                                                 </a>
                                             @endif
                                         </td>
                                         <td class="align-middle">{{ $product->id }}</td>
                                         <td class="align-middle">{{ $product->name }}</td>
-                                        <td class="align-middle">{{ $product->category }}</td>
+                                        <td class="align-middle">{{ $product->category->name }}</td>
                                         <td class="align-middle">{{ $product->code }}</td>
                                         <td class="align-middle">{{ $product->stock }}</td>
                                         <td class="align-middle">{{ $product->description }}</td>

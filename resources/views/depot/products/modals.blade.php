@@ -39,7 +39,7 @@
                     @if($product->image)
                     <div class="form-group">
                         <label for="currentImage">Image:</label>
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-thumbnail" id="currentImage" style="max-width: 200px;">
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-thumbnail" id="currentImage" style="max-width: 200px;">
                     </div>
                     @endif
                     <div class="form-group">
@@ -91,7 +91,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <img id="modalImage" src="{{ asset($product->image) }}"  class="img-fluid">
+                    <img id="modalImage" src="{{ asset('storage/' . $product->image) }}"  class="img-fluid">
                 </div>
             </div>
         </div>
