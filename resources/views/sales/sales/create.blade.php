@@ -107,7 +107,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="sale_price" class="col-form-label">Sale Price:</label>
-                                    <input type="text" min="0" class="form-control" name="sale_price" id="sale_price" aria-describedby="sale_price-error" aria-invalid="true" disabled>
+                                    <input type="text" min="0" class="form-control" name="sale_price" id="sale_price" aria-describedby="sale_price-error" aria-invalid="true">
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -520,7 +520,7 @@
         } else {
 
             $.ajax({
-                url: `http://pos-demo.test/depot/products/${product_id}`,
+                url: `/depot/products/${product_id}`,
                 type: 'GET',
                 dataType: 'json',
                 data: dataToSend,
