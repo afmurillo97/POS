@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::table('users', function (Blueprint $table) {
 
-            $table->unsignedBigInteger('role_id')->after('name');
+            $table->unsignedBigInteger('role_id')->nullable()->after('name');
             $table->enum('status', [1, 0])->nullable()->after('password');
 
             // Define restriction
