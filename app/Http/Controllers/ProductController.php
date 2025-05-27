@@ -46,17 +46,17 @@ class ProductController extends Controller
     {
         $query = strtolower($request->input('searchText'));
 
-        $productsQuery = Product::join('categories', 'products.category_id', '=', 'categories.id')
-            ->select('products.*', 'categories.name AS category')
-            
-            ->orderBy('products.id', 'desc');
+        $productsQuery = Product::with('category')
+            ->orderBy('id', 'desc');
 
         if ($query) {
             $productsQuery->where(function($queryBuilder) use ($query) {
-                $queryBuilder->where('products.name', 'LIKE', '%'.$query.'%')
-                            ->orWhere('categories.name', 'LIKE', '%'.$query.'%')
-                            ->orWhere('products.code', 'LIKE', '%'.$query.'%')
-                            ->orWhere('products.description', 'LIKE', '%'.$query.'%');
+                $queryBuilder->where('name', 'LIKE', '%'.$query.'%')
+                            ->orWhereHas('category', function($q) use ($query) {
+                                $q->where('name', 'LIKE', '%'.$query.'%');
+                            })
+                            ->orWhere('code', 'LIKE', '%'.$query.'%')
+                            ->orWhere('description', 'LIKE', '%'.$query.'%');
             });
         }
 
@@ -96,9 +96,31 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = Str::slug($request->name) . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/products', $imageName);
 
-            $product->image = 'storage/' . str_replace('public/', '', $imagePath);
+            try {
+                // Asegurarse de que el directorio existe
+                $directory = storage_path('app/public/products');
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0755, true);
+                }
+
+                // Mover la imagen directamente
+                $destinationPath = $directory . '/' . $imageName;
+                $moved = $image->move($directory, $imageName);
+
+                if ($moved) {
+                    \Log::info('Imagen movida exitosamente', ['path' => $destinationPath]);
+                    $product->image = 'products/' . $imageName;
+                } else {
+                    \Log::error('Error al mover la imagen');
+                    throw new \Exception('No se pudo mover la imagen');
+                }
+            } catch (\Exception $e) {
+                \Log::error('Error al guardar la imagen', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
         }
 
         $product->save();
@@ -113,11 +135,7 @@ class ProductController extends Controller
     {
         $product_id = $request->get('product_id');
     
-        $product = Product::join('categories', 'products.category_id', '=', 'categories.id')
-            ->select('products.*', 'categories.name AS category')
-            ->where('products.id', '=', $product_id)
-
-            ->first();
+        $product = Product::findOrFail($product_id);
         
         if (!$product) {
             return response()->json([
@@ -128,9 +146,10 @@ class ProductController extends Controller
         }
 
         $last_sale_price = DB::table('income_detail')
-        ->where('product_id', $product_id)
-        ->latest('created_at')
-        ->value('sale_price');
+            ->where('product_id', $product_id)
+            ->latest('created_at')
+            ->value('sale_price');
+
 
         $product->sale_price = $last_sale_price;
 
@@ -164,9 +183,31 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = Str::slug($request->name) . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/products', $imageName);
 
-            $product->image = 'storage/' . str_replace('public/', '', $imagePath);
+            try {
+                // Asegurarse de que el directorio existe
+                $directory = storage_path('app/public/products');
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0755, true);
+                }
+
+                // Mover la imagen directamente
+                $destinationPath = $directory . '/' . $imageName;
+                $moved = $image->move($directory, $imageName);
+
+                if ($moved) {
+                    \Log::info('Imagen movida exitosamente', ['path' => $destinationPath]);
+                    $product->image = 'products/' . $imageName;
+                } else {
+                    \Log::error('Error al mover la imagen');
+                    throw new \Exception('No se pudo mover la imagen');
+                }
+            } catch (\Exception $e) {
+                \Log::error('Error al guardar la imagen', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
         }
 
         $product->update();
