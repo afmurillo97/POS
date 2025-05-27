@@ -14,8 +14,6 @@ use Illuminate\View\View;
 use Illuminate\Support\Str;
 
 
-
-
 class ProductController extends Controller
 {
     public function __construct()
@@ -151,7 +149,7 @@ class ProductController extends Controller
             ->value('sale_price');
 
 
-        $product->sale_price = $last_sale_price;
+        $product->sale_price = $last_sale_price ?? 1.00;
 
         return response()->json([
             'status' => true,
