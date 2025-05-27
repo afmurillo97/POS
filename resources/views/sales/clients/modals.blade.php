@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-group">
                         <label for="phone" class="col-form-label">Phone:</label>
-                        <input type="number" value="{{ $client->phone }}" class="form-control" name="phone" id="phone" aria-describedby="-error" aria-invalid="true">
+                        <input type="text" value="{{ $client->phone }}" class="form-control" name="phone" id="phone" aria-describedby="-error" aria-invalid="true">
                     </div>
                     <div class="form-group">
                         <label for="email" class="col-form-label">Email:</label>
